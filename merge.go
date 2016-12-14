@@ -116,8 +116,8 @@ func merge(dst, src interface{}, overwrite bool) error {
 	if vDst, vSrc, err = resolveValues(dst, src); err != nil {
 		return err
 	}
-	if vDst.Type() != vSrc.Type() {
-		return ErrDifferentArgumentsTypes
+	if vDst.Kind() != vSrc.Kind() {
+		return ErrDifferentArgumentsKinds
 	}
 	return deepMerge(vDst, vSrc, make(map[uintptr]*visit), 0, overwrite)
 }

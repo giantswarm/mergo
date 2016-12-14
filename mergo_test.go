@@ -10,10 +10,15 @@ import (
 	"reflect"
 	"testing"
 	"time"
+
 	"gopkg.in/yaml.v1"
 )
 
 type simpleTest struct {
+	Value int
+}
+
+type simpleTestB struct {
 	Value int
 }
 
@@ -78,10 +83,21 @@ func TestNil(t *testing.T) {
 	}
 }
 
-func TestDifferentTypes(t *testing.T) {
+func TestDifferentKinds(t *testing.T) {
 	a := simpleTest{42}
 	b := 42
-	if err := Merge(&a, b); err != ErrDifferentArgumentsTypes {
+	if err := Merge(&a, b); err != ErrDifferentArgumentsKinds {
+		t.Fail()
+	}
+}
+
+func TestDifferentTypes(t *testing.T) {
+	a := simpleTest{}
+	b := simpleTestB{42}
+	if err := Merge(&a, b); err != nil {
+		t.Fail()
+	}
+	if a.Value != b.Value {
 		t.Fail()
 	}
 }
